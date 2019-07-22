@@ -94,6 +94,12 @@
             NSLayoutConstraint *rightConstraint = [NSLayoutConstraint constraintWithItem:cell.contentView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:cell attribute:NSLayoutAttributeRight multiplier:1.0 constant:-rightSystemViewsWidth];
             NSLayoutConstraint *topConstraint = [NSLayoutConstraint constraintWithItem:cell.contentView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:cell attribute:NSLayoutAttributeTop multiplier:1.0 constant:0];
             NSLayoutConstraint *bottomConstraint = [NSLayoutConstraint constraintWithItem:cell.contentView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:cell attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0];
+            
+            leftConstraint.priority = UILayoutPriorityRequired - 1;
+            rightConstraint.priority = UILayoutPriorityRequired - 1;
+            topConstraint.priority = UILayoutPriorityRequired - 1;
+            bottomConstraint.priority = UILayoutPriorityRequired - 1;
+            
             edgeConstraints = @[leftConstraint, rightConstraint, topConstraint, bottomConstraint];
             [cell addConstraints:edgeConstraints];
         }
@@ -158,7 +164,12 @@
         templateCell = [self dequeueReusableCellWithIdentifier:identifier];
         NSAssert(templateCell != nil, @"Cell must be registered to table view for identifier - %@", identifier);
         templateCell.fd_isTemplateLayoutCell = YES;
-        templateCell.contentView.translatesAutoresizingMaskIntoConstraints = NO;
+        
+        // 解决iOS11以上版本控制台输出[LayoutConstraints]log
+        if ([UIDevice currentDevice].systemVersion.doubleValue < 11.0) {
+            templateCell.contentView.translatesAutoresizingMaskIntoConstraints = NO;
+        }
+        
         templateCellsByIdentifiers[identifier] = templateCell;
         [self fd_debugLog:[NSString stringWithFormat:@"layout cell created - %@", identifier]];
     }

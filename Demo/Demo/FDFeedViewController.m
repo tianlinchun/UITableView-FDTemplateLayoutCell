@@ -146,6 +146,7 @@ typedef NS_ENUM(NSInteger, FDSimulatedCacheMode) {
       destructiveButtonTitle:nil
       otherButtonTitles:
       @"Insert a row",
+      @"Dele a row",
       @"Insert a section",
       @"Delete a section", nil]
      showInView:self.view];
@@ -154,6 +155,7 @@ typedef NS_ENUM(NSInteger, FDSimulatedCacheMode) {
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     SEL selectors[] = {
         @selector(insertRow),
+        @selector(deleteRow),
         @selector(insertSection),
         @selector(deleteSection)
     };
@@ -177,6 +179,16 @@ typedef NS_ENUM(NSInteger, FDSimulatedCacheMode) {
         [self.feedEntitySections[0] insertObject:self.randomEntity atIndex:0];
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
         [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
+}
+
+- (void)deleteRow {
+    if (self.feedEntitySections.count != 0 && [self.feedEntitySections[0] count] > 0) {
+        NSMutableArray *section = [[NSMutableArray alloc] initWithArray:self.feedEntitySections[0]];
+        [section removeObjectAtIndex:0];
+        self.feedEntitySections[0] = section;
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+        [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
 }
 

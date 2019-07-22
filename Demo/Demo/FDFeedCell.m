@@ -26,6 +26,9 @@
     
     // Fix the bug in iOS7 - initial constraints warning
     self.contentView.bounds = [UIScreen mainScreen].bounds;
+    
+    // iOS10.2上的崩溃问题
+    self.contentLabel.preferredMaxLayoutWidth = [UIScreen mainScreen].bounds.size.width - 20;
 }
 
 - (void)setEntity:(FDFeedEntity *)entity
